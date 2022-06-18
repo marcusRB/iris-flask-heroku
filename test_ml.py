@@ -1,3 +1,5 @@
+import joblib
+
 # Fichero test.py
 
 # Realizar unas predicciones de prueba
@@ -13,5 +15,5 @@ prediction_raw = classifier_loaded.predict(X_manual_test)
 print("Prediction_raw", prediction_raw)
 
 prediction_real = encoder_loaded.inverse_transform(
-                            classifier.predict(X_manual_test))
+                            classifier_loaded.predict(X_manual_test))
 print("Real prediction", prediction_real)
