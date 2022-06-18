@@ -1,3 +1,10 @@
+'''
+DOC STRING
+author
+date
+description
+
+'''
 from flask import Flask, session, url_for, render_template, redirect
 import joblib
 
@@ -9,11 +16,14 @@ encoder_loaded = joblib.load("saved_models/iris_label_encoder.pkl")
 
 # Creamos la función de predicción
 def make_prediction(model, encoder, sample_json):
+    '''
+    Doc string
+    '''
     SepalLengthCm = sample_json['SepalLengthCm']
     SepalWidthCm = sample_json['SepalWidthCm']
     PetalLengthCm = sample_json['PetalLengthCm']
     PetalWidthCm = sample_json['PetalWidthCm']
-    
+
     # Creamos un vector de input
     flower = [[SepalLengthCm, SepalWidthCm, PetalLengthCm, PetalWidthCm]]
 
@@ -31,6 +41,9 @@ app.config['SECRET_KEY'] = 'mysecretkey'
 
 @app.route('/', methods=['GET','POST'])
 def index():
+    '''
+    Doc string
+    '''
     form = FlowerForm()
 
     if form.validate_on_submit():
@@ -44,8 +57,13 @@ def index():
 
 @app.route('/prediction', methods=['POST','GET'])
 def prediction():
-    content = {'SepalLengthCm': float(session['SepalLengthCm']), 'SepalWidthCm': float(session['SepalWidthCm']),
-               'PetalLengthCm': float(session['PetalLengthCm']), 'PetalWidthCm': float(session['PetalWidthCm'])}
+    '''
+    Doc string
+    '''
+    content = {'SepalLengthCm': float(session['SepalLengthCm']),
+    'SepalWidthCm': float(session['SepalWidthCm']),
+               'PetalLengthCm': float(session['PetalLengthCm']),
+               'PetalWidthCm': float(session['PetalWidthCm'])}
 
     results = make_prediction(knn_loaded, encoder_loaded, content)
 

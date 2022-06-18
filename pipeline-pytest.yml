@@ -1,0 +1,57 @@
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+pool:
+  vmImage: 'Ubuntu 20.04'
+
+# variables:
+# - group: <nombre-grupo-variables1>
+# - group: <nombre-grupo-variables2>
+
+trigger:
+- master
+- main
+- releases/*
+
+name: 'python test'
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.10.4'
+    architecture: 'x64'
+
+- task: Bash@3
+  displayName: 'Install Requirements'
+  inputs:
+    targetType: filePath
+    filePath: 'environment_setup/install_requirements.sh'
+    workingDirectory: 'environment_setup'
+
+- bash: echo "##vso[task.prependpath]$CONDA/bin"
+  displayName: 'Add conda to PATH'
+
+- script: conda env create --quiet --force -k --file environment_setup/environment.yml
+  displayName: Create Anaconda environment
+
+# - bash: source activate iris-flask-heroku-py310
+#   displayName: Activate Anaconda environment
+
+- bash: |
+    source activate iris-flask-heroku-py310
+    pylint app.py --exit-zero
+  displayName: 'Check Pylint test'
+  failOnStderr: false
+  continueOnError: true
+
+- bash: |
+    source activate iris-flask-heroku-py310
+    python test_ml.py --help
+  displayName: 'Test ML Iris'
+
+- task: PublishTestResults@1
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '$(Build.BinariesDirectory)/*_report.xml'
+    testRunTitle: 'Publish test results'

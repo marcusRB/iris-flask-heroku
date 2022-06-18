@@ -1,0 +1,17 @@
+name: iris-flask-heroku-py310
+channels:
+  - defaults
+depedendencies:
+  - pip=21.2.4
+  - python=3.10.4
+  - pip:
+    - pandas==1.3.5
+    - Flask==2.0.2
+    - numpy==1.22.0
+    - scikit-learn==1.0.2
+    - gunicorn
+    - html5lib
+    - bs4
+    - requests
+    - joblib==1.1.0
+    - Flask-WTF==1.0.0
