@@ -21,7 +21,7 @@ def make_prediction(model, encoder, sample_json):
     prediction_raw = model.predict(flower)
 
     # Convertimos los índices en labels de las clases
-    prediction_real = encoder.inverse_transform(prediction_raw)
+    prediction_real = encoder_loaded.inverse_transform(prediction_raw)
 
     return prediction_real[0]
 
@@ -57,4 +57,4 @@ if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=8080)
 
     # REMOTO
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='10.2.81.161', port=5000)
